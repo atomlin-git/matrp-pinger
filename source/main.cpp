@@ -8,13 +8,14 @@ request req = { };
 
 int main(int, char**)
 {
-    req.send((unsigned char[400])"MCRH3110", 400);
+    unsigned char hello[400] = { 'M', 'C', 'R', 'H', '3', '1', '1', '0' };
+    req.send(hello, 400);
 
     struct sockaddr_in from_addr = { 0 };
-    int fromlen = sizeof(from_addr);
+    socklen_t fromlen = sizeof(from_addr);
 
     while (true) {
-        if(recvfrom(req.get_sock(), (char*)data, 400, 0, (sockaddr*)&from_addr, &fromlen) == 8) {
+        if(recvfrom(req.get_sock(), (char*)data, 400, 0, (sockaddr*)&from_addr, &fromlen)) {
             memcpy(&to_send, &data[4], 4);
             memcpy(&to_send[4], matreshka_secret, sizeof(matreshka_secret));
 

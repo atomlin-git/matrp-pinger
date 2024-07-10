@@ -24,8 +24,10 @@ class request
         ~request() {
             #ifdef _WIN32
                 WSACleanup();
+                closesocket(sock);
+            #elif __linux__
+                close(sock);
             #endif
-            closesocket(sock);
         };
 
         bool send(unsigned char* data, unsigned short length) {
