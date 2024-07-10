@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 2.8...3.15)
-project(matrp-pinger VERSION 0.1.0 LANGUAGES C CXX)
+project(matrp-pinger LANGUAGES C CXX)
 
-set(CMAKE_BUILD_TYPE "Release")
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG")
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(${PROJECT_NAME}) 

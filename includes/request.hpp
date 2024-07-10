@@ -3,47 +3,40 @@ static unsigned int hashes[256] = { 0x00000000, 0xF26B8303, 0xE13B70F7, 0x1350F3
 
 class request
 {
+    struct sockaddr_in addr;
+    int sock;
+
     public:
-        request()
-        {
-            static WSADATA data = {0};
-            static DWORD toggle = 1;
+        request() {
+            #ifdef _WIN32
+                static WSADATA data = { 0 };
+                WSAStartup(MAKEWORD(2, 2), &data);
+            #endif
 
-            WSAStartup(MAKEWORD(2, 2), &data);
             sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+            if (sock == -1) return;
 
-            if (sock == INVALID_SOCKET) exit(1);
-            if (ioctlsocket(sock, FIONBIO, &toggle) == INVALID_SOCKET) exit(2);
-
-            from.sin_family = AF_INET;
             addr.sin_family = AF_INET;
             addr.sin_port = htons(7777);
-            addr.sin_addr.s_addr = inet_addr("91.220.80.12");
-        }
+            addr.sin_addr.s_addr = inet_addr("91.220.80.46");
+        };
 
-        ~request()
-        {
-            WSACleanup();
+        ~request() {
+            #ifdef _WIN32
+                WSACleanup();
+            #endif
             closesocket(sock);
-        }
+        };
 
-        bool send(unsigned char* data, unsigned short length)
-        {
-            if(data == nullptr || !length) return false;
-            sendto(sock, (char*)data, length, 0, (sockaddr*)&addr, sizeof(sockaddr_in));
-            return true;
-        }
+        bool send(unsigned char* data, unsigned short length) {
+            if(!data) return false;
+            return sendto(sock, (char*)data, length, 0, (sockaddr*)&addr, sizeof(sockaddr_in));
+        };
 
-        unsigned int encrypt(unsigned char* data, unsigned int length, unsigned int key)
-        {
+        unsigned int encrypt(unsigned char* data, unsigned int length, unsigned int key) {
             for (unsigned short i = 0; i < length; ++i) key = hashes[data[i] ^ (unsigned char)key] ^ (key >> 8);
             return key;
-        }
+        };
 
-        SOCKET get_sock() { return sock; };
-        sockaddr* get_from() { return (sockaddr*)&from; };
-    private:
-        struct sockaddr_in from;
-        struct sockaddr_in addr;
-        SOCKET sock;
+        auto get_sock() { return sock; };
 };
