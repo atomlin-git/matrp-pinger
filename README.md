@@ -1,3 +1,3 @@
-###### Пропинговка для мобильного проекта Matreshka RP
-###### Ничего уникального тут нет, так как это не их разработка, и к этому есть документация - https://docs.mitigator.ru/v23.06/en/kb/bpf/tutorial/index.html
-###### К огромному сожалению узнал я об этом только после того как разревёрсил и переписал это, так что пусть это просто останется здесь
+###### Application for pinging matreshka rp servers
+###### There is nothing unique here, since this is not their development, and there is documentation for this - https://docs.mitigator.ru/v23.06/en/kb/bpf/tutorial/index.html
+###### Unfortunately, I only found out about it after I reversed and rewrote it, so let it just stay here.
